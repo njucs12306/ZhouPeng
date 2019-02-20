@@ -8,13 +8,14 @@
 
 using namespace std;
 
-int TicketSystem::findNode(char number[])//判断某班次是否已经存在
+int TicketSystem::findNode(char number[])
 {
 	for (int i = 0; i < BuyPP.size(); i++)
-		if (!strcmp(number, BuyPP[i].number))return i;
+		if (strcmp(number, BuyPP[i].number)==0)return i;
 	return -1;
 }
-//查找班次(不存在返回-1，否则返回下标)  O(n)
+//查找班次(不存在返回-1，否则返回下标)  
+
 void TicketSystem::findNode_by_des(int i, int &a, int &b, char be[], char ed[])
 {
 	int bok = 0, eok = 0;
@@ -28,11 +29,12 @@ void TicketSystem::findNode_by_des(int i, int &a, int &b, char be[], char ed[])
 		if (bok&&eok) break;
 	}
 }
-//查找班次（利用引用传值，返回出发站点与终止站点的下标）  O(n)
+//查找班次（利用引用传值，返回出发站点与终止站点的下标）  
+
 bool TicketSystem::deleteNode(char number[])
 {
 	int pos = findNode(number);
-	if (pos == -1) { cout << "删除失败！\n"; return false; }
+	if (pos == -1) { cout << "该班次不存在！\n"; return false; }
 	else
 	{
 		int ok = 1;
@@ -54,7 +56,7 @@ bool TicketSystem::deleteNode(char number[])
 	cout << "删除成功！\n";
 }
 //删除班次  O(n)
-bool TicketSystem::addNode(char input[])//添加手动输入的班次（文件输入还不会）
+bool TicketSystem::addNode(char input[])
 {
 	char buf[maxn];
 	sscanf(input, "%[^,]", buf);
@@ -89,7 +91,7 @@ bool TicketSystem::checkNode_by_num(char number[])
 	else
 	{
 		cout << number << ",100|";
-		for (int i = 0; strlen(BuyPP[pos].station[i]) > 1; i++)
+		for (int i = 0; strlen(BuyPP[pos].station[i]); i++)
 		{
 			cout << BuyPP[pos].station[i] << "," << BuyPP[pos].rest[i] << "|";
 		}
@@ -166,6 +168,8 @@ bool TicketSystem::add_file()
 		while (!feof(fp))
 		{
 			fgets(input, 10 * maxn, fp);
+			int k = strlen(input);
+			input[k] = '\0';
 			addNode(input);
 		}
 		fclose(fp);
@@ -235,7 +239,7 @@ void TicketSystem::buyTicket()
 	{
 		buildList(number, be, ed, num);
 		cout << ".  购票成功！" << endl;
-		for (int i = a; i <= b; i++)
+		for (int i = a; i < b; i++)
 		{
 			BuyPP[des].rest[i] -= num;
 		}
@@ -254,7 +258,7 @@ void TicketSystem::returnTicket()
 	nodes[num].es = 0;
 	if (nodes[num].es == 0)
 	{
-		for (int i = a; i <= b; i++)
+		for (int i = a; i < b; i++)
 		{
 			BuyPP[m].rest[i] += n;
 		}
